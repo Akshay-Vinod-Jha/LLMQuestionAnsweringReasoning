@@ -1,6 +1,7 @@
 """Test evaluation route and scoring logic"""
 from fastapi import APIRouter, HTTPException
 from typing import List, Dict
+import os
 from schemas import (
     TestEvaluateRequest, TestEvaluateResponse,
     QuestionFeedback, LLMEvaluationResult, QuestionType
@@ -70,8 +71,8 @@ async def evaluate_single_question(question_data: dict, student_answer: str) -> 
         try:
             llm_response = call_llm(
                 prompt=prompt,
-                model="llama-3.1-8b-instant",
-                temperature=0.2
+                model=os.getenv("EVALUATION_MODEL", "llama-3.1-8b-instant"),
+                temperature=float(os.getenv("LLM_TEMPERATURE", "0.3"))
             )
             feedback = llm_response.get("feedback", "Answer evaluated.")
         except Exception:
@@ -103,8 +104,8 @@ async def evaluate_single_question(question_data: dict, student_answer: str) -> 
         try:
             llm_response = call_llm(
                 prompt=prompt,
-                model="llama-3.1-8b-instant",
-                temperature=0.2
+                model=os.getenv("EVALUATION_MODEL", "llama-3.1-8b-instant"),
+                temperature=float(os.getenv("LLM_TEMPERATURE", "0.3"))
             )
             
             # Validate response
@@ -228,8 +229,8 @@ async def evaluate_test(request: TestEvaluateRequest):
             overall_prompt = get_overall_feedback_prompt(weak_concepts, percentage)
             overall_response = call_llm(
                 prompt=overall_prompt,
-                model="llama-3.1-8b-instant",
-                temperature=0.3
+                model=os.getenv("EVALUATION_MODEL", "llama-3.1-8b-instant"),
+                temperature=float(os.getenv("LLM_TEMPERATURE", "0.3"))
             )
         except Exception:
             overall_response = {}

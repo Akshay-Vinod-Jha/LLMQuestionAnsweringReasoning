@@ -2,6 +2,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 import uuid
+import os
 from schemas import (
     TestGenerateRequest, TestGenerateResponse,
     QuestionInternal, QuestionPublic, LLMQuestionGeneration
@@ -41,11 +42,11 @@ async def generate_test(request: TestGenerateRequest):
             question_types=question_types
         )
         
-        # Call LLM for question generation (llama-3.1-8b-instant)
+        # Call LLM for question generation
         llm_response = call_llm(
             prompt=prompt,
-            model="llama-3.1-8b-instant",
-            temperature=0.3
+            model=os.getenv("GENERATION_MODEL", "llama-3.1-8b-instant"),
+            temperature=float(os.getenv("LLM_TEMPERATURE", "0.3"))
         )
         
         # Validate LLM response structure
