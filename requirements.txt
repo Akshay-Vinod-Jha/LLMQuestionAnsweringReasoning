@@ -1,0 +1,14 @@
+# Auto Test Generator & Evaluator - Requirements
+# Feature-9 for AI-Powered Multimodal Smart Learning Assistant
+
+# Core dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+pydantic==2.9.0
+python-dotenv==1.0.1
+
+# LLM integration
+groq>=0.13.0
+
+# Optional utilities
+python-multipart==0.0.9
